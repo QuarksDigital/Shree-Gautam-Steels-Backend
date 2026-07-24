@@ -11,7 +11,7 @@ import { logger } from '@/utils/logger';
 const run = async (): Promise<void> => {
   await connectDB();
   if (!isDbConnected()) {
-    logger.error('Cannot seed — no MongoDB connection. Check MONGODB_URI and Atlas IP access list.');
+    logger.error('Cannot seed - no MongoDB connection. Check MONGODB_URI and Atlas IP access list.');
     process.exit(1);
   }
 

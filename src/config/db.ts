@@ -11,7 +11,7 @@ let connected = false;
  */
 export const connectDB = async (): Promise<boolean> => {
   if (!env.mongoUri) {
-    logger.warn('MONGODB_URI not set — using in-memory seed data.');
+    logger.warn('MONGODB_URI not set - using in-memory seed data.');
     return false;
   }
   try {
@@ -24,7 +24,7 @@ export const connectDB = async (): Promise<boolean> => {
     logger.info(`MongoDB connected (db: ${env.mongoDb}).`);
     return true;
   } catch (err) {
-    logger.error('MongoDB connection failed — falling back to seed data.', err);
+    logger.error('MongoDB connection failed - falling back to seed data.', err);
     return false;
   }
 };

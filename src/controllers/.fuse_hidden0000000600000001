@@ -26,7 +26,7 @@ export const createEnquiry = async (req: Request, res: Response, next: NextFunct
 
     res.status(201).json({
       success: true,
-      message: 'Thank you — your enquiry has been received. We respond within one business day.',
+      message: 'Thank you - your enquiry has been received. We respond within one business day.',
       id,
     });
   } catch (err) {

@@ -1,0 +1,27 @@
+# Render Blueprint for the Shree Gautam Enterprises backend.
+# If your Git repo contains BOTH the backend and the frontend, keep `rootDir: backend`.
+# If this backend is its own repo, remove the `rootDir` line.
+services:
+  - type: web
+    name: shreegautam-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    # --include=dev guarantees the TypeScript build tools (tsc, tsc-alias) are
+    # installed even when Render sets NODE_ENV=production during install.
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_DB
+        value: shreegautam
+      # Secrets - set these values in the Render dashboard (sync:false = not committed).
+      - key: MONGODB_URI
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: ADMIN_API_KEY
+        sync: false
+    # Render provides PORT automatically; the app reads process.env.PORT.

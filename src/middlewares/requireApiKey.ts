@@ -6,7 +6,7 @@ import { logger } from '@/utils/logger';
 /**
  * Guards write endpoints. If ADMIN_API_KEY is set, requests must send a matching
  * `x-api-key` header. If it is unset, writes are allowed (dev convenience) with a
- * one-time warning — set the key before exposing the API publicly.
+ * one-time warning - set the key before exposing the API publicly.
  */
 let warned = false;
 
@@ -17,7 +17,7 @@ export const requireApiKey = (
 ): void => {
   if (!env.adminApiKey) {
     if (!warned) {
-      logger.warn('ADMIN_API_KEY not set — write endpoints are UNPROTECTED.');
+      logger.warn('ADMIN_API_KEY not set - write endpoints are UNPROTECTED.');
       warned = true;
     }
     return next();

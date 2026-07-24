@@ -11,7 +11,7 @@ const json = (message: string) => ({
 export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,
-  ...json('Too many requests — please slow down and try again shortly.'),
+  ...json('Too many requests - please slow down and try again shortly.'),
 });
 
 /** Strict limiter for enquiry submissions (anti-spam). */

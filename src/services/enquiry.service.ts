@@ -10,7 +10,7 @@ interface Meta {
 
 const requireDb = (): void => {
   if (!isDbConnected()) {
-    throw new ApiError(503, 'Database not connected — enquiry could not be saved.');
+    throw new ApiError(503, 'Database not connected - enquiry could not be saved.');
   }
 };
 

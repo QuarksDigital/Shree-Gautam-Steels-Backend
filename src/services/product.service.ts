@@ -48,7 +48,7 @@ const filterSeed = (query: ProductQuery): Product[] => {
 
 const requireDb = (): void => {
   if (!isDbConnected()) {
-    throw new ApiError(503, 'Database not connected — write operations are unavailable.');
+    throw new ApiError(503, 'Database not connected - write operations are unavailable.');
   }
 };
 

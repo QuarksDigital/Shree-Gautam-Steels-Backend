@@ -4,7 +4,7 @@ import { logger } from '@/utils/logger';
 import { connectDB, disconnectDB } from '@/config/db';
 
 const start = async (): Promise<void> => {
-  // Connect to MongoDB (non-fatal — API falls back to seed data if it fails).
+  // Connect to MongoDB (non-fatal - API falls back to seed data if it fails).
   await connectDB();
 
   const app = createApp();
@@ -14,7 +14,7 @@ const start = async (): Promise<void> => {
   });
 
   const shutdown = (signal: string): void => {
-    logger.warn(`${signal} received — shutting down.`);
+    logger.warn(`${signal} received - shutting down.`);
     server.close(async () => {
       await disconnectDB();
       logger.info('Server closed.');

@@ -1,7 +1,7 @@
 {
   "name": "shreegautam-backend",
   "version": "1.0.0",
-  "description": "REST API for Shree Gautam Enterprises — B2B stainless steel manufacturer.",
+  "description": "REST API for Shree Gautam Enterprises - B2B stainless steel manufacturer.",
   "main": "dist/server.js",
   "type": "commonjs",
   "engines": {

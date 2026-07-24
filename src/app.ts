@@ -32,7 +32,7 @@ export const createApp = (): Application => {
   // HTTP request logging
   app.use(morgan(isProd ? 'combined' : 'dev'));
 
-  // Root — quick liveness check
+  // Root - quick liveness check
   app.get('/', (_req, res) => {
     res.json({ success: true, service: 'shreegautam-backend', docs: `${env.apiPrefix}/health` });
   });

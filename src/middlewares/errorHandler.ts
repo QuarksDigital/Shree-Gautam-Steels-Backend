@@ -3,7 +3,7 @@ import { ApiError } from '@/utils/ApiError';
 import { logger } from '@/utils/logger';
 import { isProd } from '@/config/env';
 
-/** Central error handler — the last middleware in the stack. */
+/** Central error handler - the last middleware in the stack. */
 export const errorHandler = (
   err: unknown,
   _req: Request,

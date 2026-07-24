@@ -1,24 +1,24 @@
-# Shree Gautam Enterprises — Backend API
+# Shree Gautam Enterprises - Backend API
 
 REST API (Node + Express + TypeScript) that serves the product catalogue for the
 Shree Gautam Enterprises website.
 
 ## Stack
 
-- **Express 4** — HTTP server & routing
-- **TypeScript** — strict, path-aliased (`@/*` → `src/*`)
-- **helmet / cors / morgan** — security, cross-origin, request logging
+- **Express 4** - HTTP server & routing
+- **TypeScript** - strict, path-aliased (`@/*` → `src/*`)
+- **helmet / cors / morgan** - security, cross-origin, request logging
 
 ## Structure
 
 ```
 src/
-├── server.ts              # entry point — boots the HTTP server
+├── server.ts              # entry point - boots the HTTP server
 ├── app.ts                 # express app: middleware + route mounting
 ├── config/
 │   └── env.ts             # typed environment config
 ├── routes/
-│   ├── index.ts           # CENTRAL router — imports every feature router
+│   ├── index.ts           # CENTRAL router - imports every feature router
 │   ├── health.routes.ts
 │   └── product.routes.ts
 ├── controllers/
