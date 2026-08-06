@@ -13,7 +13,8 @@
     "start": "node dist/server.js",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit",
-    "seed": "tsx src/scripts/seed.ts"
+    "seed": "tsx src/scripts/seed.ts",
+    "seed:js": "node scripts/seed.js"
   },
   "keywords": [
     "express",

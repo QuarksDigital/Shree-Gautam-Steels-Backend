@@ -1,21 +1,34 @@
-import type { Product } from '@/types/product';
-
 /**
- * Product catalogue for Shree Gautam Enterprises (est. 1981, Wazirpur, New Delhi).
- * Used to seed MongoDB and as an offline fallback.
+ * Standalone MongoDB seeding script (plain Node / CommonJS).
  *
- * Product photography is bundled in the frontend under `public/products/`, so the
- * `image` field is a frontend-relative path. Prices are approximate (prefixed
- * with "~") and reference the public listings on shreegautamsteel.com.
+ * No build step required — run it directly:
+ *   node scripts/seed.js
+ * or via npm:
+ *   npm run seed:js
+ *
+ * Reads MONGODB_URI / MONGODB_DB from `.env` (see .env.example), upserts the
+ * product catalogue by `slug` (idempotent — safe to re-run), then exits.
+ *
+ * The product list here mirrors src/data/products.ts so the seed works without
+ * compiling the TypeScript sources.
  */
 
-// Frontend-relative product photography (served from the Next.js `public/products/`).
+'use strict';
+
+require('dotenv').config();
+const mongoose = require('mongoose');
+
+const MONGODB_URI = process.env.MONGODB_URI || '';
+const MONGODB_DB = process.env.MONGODB_DB || 'shreegautam';
+
+// Frontend-relative product photography (served from the Next.js public/products/).
 const IMG_SAUCEPAN = '/products/tri-ply-saucepan.png';
 const IMG_CASSEROLE = '/products/triply-casserole.png';
 const IMG_CASSEROLE_26 = '/products/triply-casserole-26cm.png';
 const IMG_TOPE_24 = '/products/tri-ply-tope-24cm.png';
 
-export const products: Product[] = [
+/** @type {Array<object>} */
+const products = [
   {
     id: 'sg-001',
     slug: 'tri-ply-stainless-steel-saucepan',
@@ -94,3 +107,78 @@ export const products: Product[] = [
     featured: true,
   },
 ];
+
+// Mongoose schema (kept in sync with src/models/product.model.ts).
+const specSchema = new mongoose.Schema(
+  {
+    material: { type: String, required: true },
+    gauge: String,
+    capacity: String,
+    finish: String,
+    dimensions: String,
+  },
+  { _id: false },
+);
+
+const productSchema = new mongoose.Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    slug: { type: String, required: true, unique: true, index: true },
+    name: { type: String, required: true },
+    category: {
+      type: String,
+      required: true,
+      enum: ['Cookware', 'Serveware', 'Storage', 'Thalis', 'Spice Boxes'],
+      index: true,
+    },
+    tagline: { type: String, required: true },
+    description: { type: String, required: true },
+    image: { type: String, required: true },
+    specs: { type: specSchema, required: true },
+    price: String,
+    moq: { type: Number, required: true },
+    featured: { type: Boolean, default: false },
+  },
+  { timestamps: true },
+);
+
+const ProductModel =
+  mongoose.models.Product || mongoose.model('Product', productSchema);
+
+async function run() {
+  if (!MONGODB_URI) {
+    console.error(
+      '[seed] MONGODB_URI is not set. Copy .env.example to .env and set it, then re-run.',
+    );
+    process.exit(1);
+  }
+
+  mongoose.set('strictQuery', true);
+  await mongoose.connect(MONGODB_URI, {
+    dbName: MONGODB_DB,
+    serverSelectionTimeoutMS: 10000,
+  });
+  console.log(`[seed] Connected to MongoDB (db: ${MONGODB_DB}).`);
+
+  console.log(`[seed] Upserting ${products.length} products...`);
+  for (const p of products) {
+    await ProductModel.updateOne({ slug: p.slug }, { $set: p }, { upsert: true });
+    console.log(`  ✓ ${p.name}`);
+  }
+
+  const count = await ProductModel.countDocuments();
+  console.log(`[seed] Done. Collection now holds ${count} products.`);
+
+  await mongoose.disconnect();
+  process.exit(0);
+}
+
+run().catch(async (err) => {
+  console.error('[seed] Seeding failed:', err);
+  try {
+    await mongoose.disconnect();
+  } catch (_) {
+    /* ignore */
+  }
+  process.exit(1);
+});
